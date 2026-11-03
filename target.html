@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UMak IT Skills Olympics</title>
+    <style>
+      :root {
+        --blue: #211d63;
+        --navy: #10133d;
+        --yellow: #f1e544;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font:
+          16px/1.5 Arial,
+          sans-serif;
+        color: #fff;
+        background: var(--navy);
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .wrap {
+        width: 90%;
+        max-width: 1000px;
+        margin: auto;
+      }
+      header {
+        background: linear-gradient(135deg, var(--navy), var(--blue));
+      }
+      nav,
+      .brand,
+      .hero,
+      .banner,
+      .head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      nav {
+        min-height: 70px;
+        border-bottom: 1px solid rgba(255, 255, 255, .25);
+      }
+      .brand {
+        justify-content: flex-start;
+        font-weight: bold;
+      }
+      .logo {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border: 1px dashed var(--yellow);
+        border-radius: 50%;
+        font-size: 9px;
+        text-align: center;
+        color: var(--yellow);
+      }
+      nav ul {
+        display: flex;
+        gap: 20px;
+        padding: 0;
+        list-style: none;
+      }
+      nav a:hover,
+      .tag {
+        color: var(--yellow);
+      }
+      .hero {
+        min-height: 470px;
+        padding: 55px 0;
+      }
+      .hero > div {
+        flex: 1;
+      }
+      .tag {
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+      h1 {
+        font-size: clamp(42px, 7vw, 76px);
+        line-height: .98;
+        margin: 16px 0;
+      }
+      h1 em {
+        color: var(--yellow);
+        font-style: normal;
+      }
+      .theme {
+        color: var(--yellow);
+        font-weight: bold;
+      }
+      .btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 18px;
+        border-radius: 24px;
+        background: var(--yellow);
+        color: var(--navy);
+        font-weight: bold;
+      }
+      .hero > .poster {
+        flex: .8;
+        min-height: 320px;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: var(--navy);
+        background: var(--yellow);
+        clip-path: polygon(0 0, 100% 0, 100% 90%, 82% 100%, 0 100%);
+      }
+      .poster h2 {
+        font-size: 42px;
+        line-height: .9;
+        margin: 8px 0;
+      }
+      .banner {
+        justify-content: space-around;
+        padding: 17px;
+        color: var(--navy);
+        background: var(--yellow);
+        font-size: 13px;
+        font-weight: bold;
+      }
+      section {
+        padding: 60px 0;
+      }
+      h2 {
+        font-size: clamp(30px, 4vw, 48px);
+        line-height: 1.05;
+        margin: 8px 0 18px;
+      }
+      .gallery {
+        background: linear-gradient(145deg, #19194f, var(--navy));
+      }
+      .head {
+        align-items: end;
+        margin-bottom: 24px;
+      }
+      .head p {
+        max-width: 300px;
+        color: #ddd;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr 1fr;
+        grid-template-rows: 150px 150px;
+        gap: 12px;
+      }
+      figure {
+        position: relative;
+        margin: 0;
+        overflow: hidden;
+        background: linear-gradient(135deg, #34329a, var(--blue));
+      }
+      figure img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+      figure:first-child {
+        grid-row: span 2;
+      }
+      figcaption {
+        position: absolute;
+        bottom: 10px;
+        left: 12px;
+        padding: 3px 8px;
+        background: rgba(16, 19, 61, .73);
+        font-weight: bold;
+      }
+      #about {
+        color: var(--navy);
+        background: #fffbe2;
+      }
+      .about {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+      }
+      .note {
+        padding: 22px;
+        border-top: 5px solid var(--blue);
+        background: #fff;
+      }
+      .event-info {
+        background: linear-gradient(130deg, var(--blue), #34329a);
+      }
+      .event-info > p {
+        max-width: 650px;
+        color: #ddd;
+      }
+      .step {
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, .33);
+      }
+      .step b {
+        color: var(--yellow);
+      }
+      .step span {
+        margin-left: 14px;
+      }
+      #contact {
+        color: var(--navy);
+        background: var(--yellow);
+        text-align: center;
+      }
+      footer {
+        padding: 20px 0;
+        background: #090b29;
+      }
+      footer .wrap {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      @media (max-width: 650px) {
+        nav,
+        .hero,
+        .head,
+        .about {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        nav {
+          padding: 14px 0;
+        }
+        nav ul {
+          flex-wrap: wrap;
+          gap: 10px 16px;
+          margin: 0;
+        }
+        .hero {
+          min-height: 0;
+        }
+        .poster {
+          width: 100%;
+        }
+        .banner {
+          justify-content: flex-start;
+          overflow: auto;
+        }
+        .grid {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 210px 140px 140px;
+        }
+        figure:first-child {
+          grid-column: span 2;
+          grid-row: auto;
+        }
+        .step span {
+          display: block;
+          margin: 4px 0 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="top">
+      <div class="wrap">
+        <nav>
+          <a class="brand" href="#top">
+            <span class="logo">SCHOOL<br>LOGO</span> UNIVERSITY OF MAKATI
+          </a>
+          <ul>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#itso">ITSO</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="hero">
+          <div>
+            <div class="tag">Ideas start here · UMak</div>
+            <h1>Ignite ideas.<br><em>Shape what’s next.</em></h1>
+            <p class="theme">Igniting Ingenuity, Transforming Digital Frontiers</p>
+            <p>Explore a campus where learning, creativity, and technology open new paths.</p>
+            <a class="btn" href="#gallery">Discover UMak ↓</a>
+          </div>
+          <div class="poster">
+            <span class="logo">SCHOOL<br>LOGO</span>
+            <div>
+              <b>UNIVERSITY OF MAKATI</b>
+              <h2>IT SKILLS<br>OLYMPICS</h2>
+              <b>Student talent meets the digital frontier.</b>
+            </div>
+            <small>UMAK · 2026</small>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="banner">
+      <span>LEARN WITH PURPOSE</span>✦<span>CREATE BOLDLY</span>✦<span>TRANSFORM THE FUTURE</span>
+    </div>
+    <main>
+      <section class="gallery" id="gallery">
+        <div class="wrap">
+          <div class="head">
+            <div>
+              <div class="tag">Campus gallery</div>
+              <h2>See where ideas grow.</h2>
+            </div>
+            <p>Replace these scenes with school photos.</p>
+          </div>
+          <div class="grid">
+            <figure>
+              <img src="campus.jpg" alt="Our campus">
+              <figcaption>Our campus</figcaption>
+            </figure>
+            <figure>
+              <img src="class.jpg" alt="Learn together">
+              <figcaption>Learn together</figcaption>
+            </figure>
+            <figure>
+              <img src="computers.jpg" alt="Build digital skills">
+              <figcaption>Build digital skills</figcaption>
+            </figure>
+            <figure>
+              <img src="event.jpg" alt="Celebrate talent">
+              <figcaption>Celebrate talent</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+      <section id="about">
+        <div class="wrap about">
+          <div>
+            <div class="tag">Discover UMak</div>
+            <h2>A campus for ideas in action.</h2>
+          </div>
+          <div class="note">
+            <b>Curiosity opens new doors.</b>
+            <p>
+              UMak connects learning, creativity, and technology. Students grow skills and share
+              their talents with the community.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section class="event-info" id="itso">
+        <div class="wrap">
+          <div class="tag">Featured campus event</div>
+          <h2>IT Skills Olympics</h2>
+          <p>
+            A celebration of student creativity, technical skill, teamwork, and fresh ideas for the
+            digital future.
+          </p>
+          <div class="step"><b>01 / IMAGINE</b><span>Explore new ideas.</span></div>
+          <div class="step"><b>02 / CREATE</b><span>Turn ideas into work.</span></div>
+          <div class="step"><b>03 / INSPIRE</b><span>Share what is possible.</span></div>
+        </div>
+      </section>
+      <section id="contact">
+        <div class="wrap">
+          <div class="tag">Contact us</div>
+          <h2>Be part of what comes next.</h2>
+          <p>Connect with UMak for campus inquiries and event updates.</p>
+          <a class="btn" href="#itso">Explore ITSO</a>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="wrap">
+        <span class="logo">SCHOOL<br>LOGO</span>
+        <b>UNIVERSITY OF MAKATI · Learn, create, connect</b>
+      </div>
+    </footer>
+  </body>
+</html>

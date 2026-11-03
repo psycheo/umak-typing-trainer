@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#10251f">
+    <title>UMak Code Recall</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17231e;
+        --muted: #78847e;
+        --line: #e4e9e5;
+        --green: #20845b;
+        --red: #c44747;
+        --dark: #10251f;
+        --gold: #e4d94b
+      ;}
+      * {
+        box-sizing: border-box
+      ;}
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0
+      ;}
+      body {
+        overflow: hidden;
+        color: var(--ink);
+        background: #f2f5f2;
+        font:
+          14px/1.4 Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif
+      ;}
+      button {
+        font: inherit
+      ;}
+      .app {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%
+      ;}
+      .topbar {
+        z-index: 2;
+        display: flex;
+        flex: 0 0 76px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 10px 22px;
+        color: #f6f8f5;
+        background: var(--dark);
+        box-shadow: 0 4px 14px #101b1726
+      ;}
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 205px
+      ;}
+      .brand-mark {
+        display: grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        border: 1px solid #e4d94b80;
+        border-radius: 11px;
+        color: var(--gold);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .04em
+      ;}
+      .brand-copy {
+        display: grid;
+        gap: 2px
+      ;}
+      .brand-copy strong {
+        font-size: 14px;
+        letter-spacing: .01em
+      ;}
+      .brand-copy small {
+        color: #b7c4bc;
+        font-size: 11px
+      ;}
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 9px
+      ;}
+      .clock-card {
+        display: grid;
+        gap: 1px;
+        min-width: 116px;
+        padding: 5px 12px;
+        border-right: 1px solid #ffffff2b;
+        text-align: right
+      ;}
+      .clock-card span {
+        color: #b9c7bf;
+        font-size: 9px;
+        font-weight: 750;
+        letter-spacing: .13em
+      ;}
+      .clock-card strong {
+        font:
+          700 22px/1.15 ui-monospace,
+          SFMono-Regular,
+          Consolas,
+          monospace;
+        letter-spacing: .04em;
+        font-variant-numeric: tabular-nums
+      ;}
+      .control-button {
+        display: inline-flex;
+        min-height: 36px;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 0 11px;
+        border: 1px solid #ffffff35;
+        border-radius: 8px;
+        color: #f7faf7;
+        background: #ffffff0d;
+        cursor: pointer;
+        transition:
+          background .15s ease,
+          border-color .15s ease,
+          opacity .15s ease
+      ;}
+      .control-button:hover:not(:disabled) {
+        border-color: #ffffff75;
+        background: #ffffff1b
+      ;}
+      .control-button:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px
+      ;}
+      .control-button:disabled {
+        cursor: default;
+        opacity: .38
+      ;}
+      .control-button.primary {
+        border-color: var(--gold);
+        color: #18251e;
+        background: var(--gold);
+        font-weight: 750
+      ;}
+      .control-button.primary:hover:not(:disabled) {
+        background: #f0e85d
+      ;}
+      .control-button.mode-button {
+        min-width: 142px;
+        font-size: 12px;
+        font-weight: 700
+      ;}
+      .control-button.mode-button.is-active {
+        border-color: #e4d94b;
+        color: #18251e;
+        background: var(--gold)
+      ;}
+      .control-button.mode-button.is-active:hover:not(:disabled) {
+        background: #f0e85d
+      ;}
+      .control-button.icon-button {
+        width: 38px;
+        padding: 0;
+        font-size: 16px
+      ;}
+      .control-button .button-label {
+        font-size: 12px
+      ;}
+      .workspace {
+        display: grid;
+        min-height: 0;
+        flex: 1;
+        grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+        gap: 14px;
+        padding: 14px
+      ;}
+      .panel {
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid #dfe6e0;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 3px 12px #23352b0a
+      ;}
+      .panel-heading {
+        display: flex;
+        flex: 0 0 67px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 11px 17px;
+        border-bottom: 1px solid var(--line)
+      ;}
+      .heading-copy {
+        display: grid;
+        min-width: 0;
+        gap: 2px
+      ;}
+      .eyebrow {
+        margin: 0;
+        color: #87938c;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .13em
+      ;}
+      .panel-heading h1,
+      .panel-heading h2 {
+        margin: 0;
+        color: var(--ink);
+        font-size: 16px;
+        font-weight: 720;
+        line-height: 1.2
+      ;}
+      .live-label {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 7px;
+        color: #50635a;
+        font-size: 10px
+      ;}
+      .live-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #41a879;
+        box-shadow: 0 0 0 3px #41a87920
+      ;}
+      .preview-frame-wrap {
+        position: relative;
+        min-height: 0;
+        flex: 1;
+        overflow: hidden;
+        background: #fff
+      ;}
+      .preview-frame {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: #fff
+      ;}
+      .preview-empty {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 9px;
+        padding: 24px;
+        color: var(--ink);
+        background: #fff;
+        text-align: center;
+        pointer-events: none
+      ;}
+      .preview-empty[hidden] {
+        display: none
+      ;}
+      .preview-empty .preview-icon {
+        color: var(--green);
+        font-size: 26px
+      ;}
+      .preview-empty strong {
+        font-size: 14px
+      ;}
+      .preview-empty span {
+        max-width: 275px;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.6
+      ;}
+      .panel-footnote {
+        display: flex;
+        min-height: 36px;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 14px;
+        border-top: 1px solid var(--line);
+        color: #718078;
+        background: #fbfcfb;
+        font-size: 10px
+      ;}
+      .panel-footnote strong {
+        color: #485950
+      ;}
+      .editor-heading {
+        flex-basis: 67px
+      ;}
+      .editor-metrics {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: #7a8780;
+        font-size: 9px;
+        font-weight: 720;
+        letter-spacing: .06em;
+        white-space: nowrap
+      ;}
+      .editor-heading .heading-copy {
+        flex: 1
+      ;}
+      .editor-heading h2 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap
+      ;}
+      .editor-metrics span {
+        display: grid;
+        gap: 2px
+      ;}
+      .editor-metrics b {
+        color: #26352d;
+        font:
+          700 12px/1.2 ui-monospace,
+          SFMono-Regular,
+          Consolas,
+          monospace;
+        letter-spacing: 0
+      ;}
+      .editor-metrics .metric-errors b {
+        color: var(--red)
+      ;}
+      .progress-track {
+        height: 3px;
+        background: #edf1ed
+      ;}
+      .progress-fill {
+        width: 0%;
+        height: 100%;
+        background: #43a677;
+        transition: width .12s linear
+      ;}
+      .editor-tools {
+        display: flex;
+        flex: 0 0 36px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 0 12px;
+        border-bottom: 1px solid var(--line);
+        color: #7a8780;
+        background: #fbfcfb
+      ;}
+      .tool-label,
+      .zoom-label {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .12em
+      ;}
+      .view-controls {
+        display: flex;
+        align-items: center;
+        gap: 4px
+      ;}
+      .zoom-button,
+      .line-numbers-toggle,
+      .correct-color-toggle {
+        display: inline-flex;
+        min-width: 27px;
+        height: 25px;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        padding: 0 7px;
+        border: 1px solid #dfe6e0;
+        border-radius: 6px;
+        color: #526259;
+        background: #fff;
+        font: 700 11px/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+        cursor: pointer
+      ;}
+      .zoom-button:hover,
+      .line-numbers-toggle:hover,
+      .correct-color-toggle:hover {
+        border-color: #b7c9bd;
+        background: #f5f9f6
+      ;}
+      .zoom-button:focus-visible,
+      .line-numbers-toggle:focus-visible,
+      .correct-color-toggle:focus-visible {
+        outline: 2px solid #458663;
+        outline-offset: 1px
+      ;}
+      .zoom-button:disabled {
+        color: #a8b1ab;
+        cursor: default
+      ;}
+      .zoom-level {
+        min-width: 39px;
+        color: #42534a;
+        font: 700 10px/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+        text-align: center
+      ;}
+      .tool-divider {
+        width: 1px;
+        height: 18px;
+        margin: 0 3px;
+        background: #dfe6e0
+      ;}
+      .line-numbers-toggle[aria-pressed="true"] {
+        border-color: #abcab5;
+        color: #24513a;
+        background: #edf6ef
+      ;}
+      .correct-color-toggle .color-swatch {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green)
+      ;}
+      .correct-color-toggle[aria-pressed="true"] .color-swatch {
+        background: #111
+      ;}
+      .editor-area {
+        position: relative;
+        min-height: 150px;
+        flex: 0 0 auto;
+        height: min(370px, calc(100vh - 360px));
+        overflow: hidden;
+        background: #fff;
+        --code-font: 15px;
+        --code-line: 1.5
+      ;}
+      .editor-area.no-line-numbers .line-gutter {
+        display: none
+      ;}
+      .editor-area.no-line-numbers .code-mirror,
+      .editor-area.no-line-numbers .code-input {
+        left: 0
+      ;}
+      .editor-area.no-line-numbers .code-input {
+        width: 100%
+      ;}
+      .line-gutter,
+      .code-mirror,
+      .code-input {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: 0;
+        font:
+          var(--code-font)/var(--code-line) ui-monospace,
+          SFMono-Regular,
+          Consolas,
+          "Liberation Mono",
+          monospace;
+        tab-size: 4;
+        white-space: pre;
+        letter-spacing: 0;
+        font-variant-ligatures: none
+      ;}
+      .line-gutter {
+        left: 0;
+        z-index: 3;
+        width: 49px;
+        overflow: hidden;
+        padding: 13px 9px 18px 0;
+        border-right: 1px solid #eff2ef;
+        color: #a9b3ad;
+        background: #fbfcfb;
+        text-align: right;
+        user-select: none;
+        pointer-events: none
+      ;}
+      .code-mirror {
+        left: 50px;
+        right: 0;
+        z-index: 1;
+        overflow: auto;
+        padding: 13px 18px 18px 13px;
+        color: #d0d6d2;
+        background: transparent;
+        scrollbar-width: none;
+        pointer-events: none
+      ;}
+      .code-mirror::-webkit-scrollbar {
+        display: none
+      ;}
+      .code-mirror .matched {
+        color: var(--green)
+      ;}
+      .editor-area.black-matched .code-mirror .matched {
+        color: #111
+      ;}
+      .code-mirror .mistake {
+        color: var(--red);
+        background: #c4474710
+      ;}
+      .code-input {
+        left: 50px;
+        z-index: 2;
+        width: calc(100% - 50px);
+        height: 100%;
+        resize: none;
+        overflow: auto;
+        padding: 13px 18px 18px 13px;
+        border: 0;
+        outline: 0;
+        color: transparent;
+        caret-color: #17231e;
+        background: transparent;
+        -webkit-text-fill-color: transparent;
+        white-space: pre;
+        overflow-wrap: normal;
+        word-break: normal
+      ;}
+      .code-input::selection {
+        color: transparent;
+        background: #417bc733;
+        -webkit-text-fill-color: transparent
+      ;}
+      .code-input:focus-visible {
+        outline: none
+      ;}
+      .code-input {
+        scrollbar-color: #9ca9a1 #edf1ee;
+        scrollbar-width: auto
+      ;}
+      .code-input::-webkit-scrollbar {
+        width: 12px;
+        height: 12px
+      ;}
+      .code-input::-webkit-scrollbar-track {
+        background: #edf1ee
+      ;}
+      .code-input::-webkit-scrollbar-thumb {
+        border: 3px solid #edf1ee;
+        border-radius: 10px;
+        background: #9ca9a1
+      ;}
+      .lesson-area {
+        min-height: 0;
+        flex: 1;
+        overflow: auto;
+        padding: 13px 15px;
+        border-top: 1px solid var(--line);
+        background: #fbfcfb
+      ;}
+      .standard-tip {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        color: #65736b
+      ;}
+      .tip-mark {
+        display: grid;
+        width: 27px;
+        height: 27px;
+        flex: 0 0 27px;
+        place-items: center;
+        border-radius: 8px;
+        color: #326b50;
+        background: #e8f2eb;
+        font-weight: 800
+      ;}
+      .standard-tip strong {
+        display: block;
+        margin: 1px 0 4px;
+        color: #33443a;
+        font-size: 11px
+      ;}
+      .standard-tip p {
+        max-width: 440px;
+        margin: 0;
+        font-size: 10px;
+        line-height: 1.6
+      ;}
+      .lesson-map {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px
+      ;}
+      .lesson-map[hidden] {
+        display: none
+      ;}
+      .lesson-chip {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 9px;
+        border: 1px solid #e3e9e4;
+        border-radius: 8px;
+        color: #56645b;
+        background: #fff;
+        text-align: left;
+        cursor: pointer
+      ;}
+      .lesson-chip:disabled {
+        opacity: .43;
+        cursor: default
+      ;}
+      .lesson-chip:not(:disabled):hover {
+        border-color: #a5c9b2;
+        background: #f8fcf9
+      ;}
+      .lesson-chip:focus-visible {
+        outline: 2px solid #458663;
+        outline-offset: 1px
+      ;}
+      .lesson-chip.is-current {
+        border-color: #52936d;
+        color: #204c33;
+        background: #edf6ef
+      ;}
+      .lesson-chip.is-complete .lesson-index {
+        color: #fff;
+        background: #31805a
+      ;}
+      .lesson-index {
+        display: grid;
+        width: 21px;
+        height: 21px;
+        flex: 0 0 21px;
+        place-items: center;
+        border-radius: 6px;
+        color: #6e7d73;
+        background: #edf1ed;
+        font:
+          700 9px ui-monospace,
+          Consolas,
+          monospace
+      ;}
+      .lesson-label {
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        font-size: 9px;
+        font-weight: 650;
+        text-overflow: ellipsis;
+        white-space: nowrap
+      ;}
+      .editor-status {
+        display: flex;
+        min-height: 40px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 13px;
+        border-top: 1px solid var(--line);
+        color: #67756d;
+        background: #fbfcfb;
+        font-size: 10px
+      ;}
+      .status-message {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap
+      ;}
+      .editor-status .shortcut {
+        flex: 0 0 auto;
+        color: #99a39d;
+        font-size: 9px
+      ;}
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        clip-path: inset(50%)
+      ;}
+      @media (max-width: 900px) {
+        .workspace {
+          gap: 9px;
+          padding: 9px
+        ;}
+        .topbar {
+          padding-right: 14px;
+          padding-left: 14px
+        ;}
+        .brand {
+          min-width: 190px
+        ;}
+        .editor-metrics {
+          gap: 9px
+        ;}
+        .editor-tools {
+          padding-right: 10px;
+          padding-left: 10px
+        ;}
+        .panel-heading {
+          padding-right: 12px;
+          padding-left: 12px
+        ;}
+        .live-label {
+          font-size: 9px
+        ;}
+        .control-button .button-label {
+          display: none
+        ;}
+        .control-button {
+          width: 38px;
+          padding: 0
+        ;}
+        .control-button.primary {
+          width: auto;
+          padding: 0 10px
+        ;}
+        .control-button.mode-button {
+          width: auto;
+          padding: 0 10px
+        ;}
+      }
+      @media (max-width: 650px) {
+        body {
+          height: auto;
+          min-height: 100%;
+          overflow: auto
+        ;}
+        .app {
+          height: auto;
+          min-height: 100%
+        ;}
+        .topbar {
+          position: sticky;
+          top: 0;
+          flex: 0 0 auto;
+          min-height: 76px;
+          flex-wrap: wrap;
+          gap: 5px 8px;
+          padding: 7px 10px
+        ;}
+        .brand {
+          min-width: 0;
+          flex: 1 1 145px;
+          gap: 7px
+        ;}
+        .brand-mark {
+          width: 32px;
+          height: 32px;
+          border-radius: 9px;
+          font-size: 10px
+        ;}
+        .brand-copy strong {
+          font-size: 12px
+        ;}
+        .brand-copy small {
+          font-size: 9px
+        ;}
+        .controls {
+          flex: 1 1 100%;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          gap: 4px
+        ;}
+        .clock-card {
+          min-width: 92px;
+          padding: 4px 7px
+        ;}
+        .clock-card strong {
+          font-size: 17px
+        ;}
+        .control-button {
+          width: 33px;
+          min-height: 33px;
+          border-radius: 7px
+        ;}
+        .control-button.primary {
+          width: auto
+        ;}
+        .control-button.mode-button {
+          flex: 1 1 calc(50% - 4px);
+          width: auto;
+          min-width: 0;
+          max-width: none;
+          padding: 0 8px;
+          font-size: 10px
+        ;}
+        .workspace {
+          flex: 0 0 auto;
+          grid-template-columns: 1fr;
+          grid-template-rows: minmax(280px, 42vh) minmax(650px, auto);
+          gap: 8px;
+          padding: 8px
+        ;}
+        .panel-heading {
+          flex-basis: 51px;
+          padding: 7px 10px
+        ;}
+        .panel-heading h1,
+        .panel-heading h2 {
+          font-size: 13px
+        ;}
+        .eyebrow {
+          font-size: 8px
+        ;}
+        .live-label {
+          gap: 5px;
+          font-size: 8px
+        ;}
+        .live-dot {
+          width: 6px;
+          height: 6px
+        ;}
+        .panel-footnote {
+          min-height: 29px;
+          padding: 5px 9px;
+          font-size: 9px
+        ;}
+        .editor-metrics {
+          gap: 8px;
+          font-size: 8px
+        ;}
+        .editor-metrics b {
+          font-size: 10px
+        ;}
+        .editor-tools {
+          flex-basis: 34px;
+          padding-right: 8px;
+          padding-left: 8px
+        ;}
+        .tool-label,
+        .zoom-label,
+        .line-numbers-label {
+          display: none
+        ;}
+        .editor-area {
+          height: min(370px, calc(100vh - 380px));
+          min-height: 175px;
+          --code-font: 14px
+        ;}
+        .lesson-area {
+          padding: 10px
+        ;}
+        .lesson-map {
+          grid-template-columns: 1fr 1fr;
+          gap: 5px
+        ;}
+        .lesson-chip {
+          padding: 6px
+        ;}
+        .lesson-label {
+          font-size: 8px
+        ;}
+        .editor-status {
+          min-height: 32px;
+          padding: 6px 9px;
+          font-size: 9px
+        ;}
+        .editor-status .shortcut {
+          display: none
+        ;}
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: .01ms !important
+        ;}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand" aria-label="UMak Code Recall typing practice">
+          <span class="brand-mark" aria-hidden="true">UM</span>
+          <div class="brand-copy">
+            <strong>UMak Code Recall</strong><small>Competition practice · formatted source</small>
+          </div>
+        </div>
+        <div class="controls" aria-label="Practice controls">
+          <button
+            id="mode-toggle"
+            class="control-button mode-button"
+            type="button"
+            aria-pressed="false"
+            disabled
+          >
+            Adaptive Learning
+          </button>
+          <button
+            id="layout-mode"
+            class="control-button mode-button"
+            type="button"
+            aria-pressed="false"
+            disabled
+          >
+            HTML Layout · 1h
+          </button>
+          <div class="clock-card">
+            <span id="timer-label">TIME LEFT</span
+            ><strong id="timer" aria-label="Two hours remaining">02:00:00</strong>
+          </div>
+          <button
+            id="pause-resume"
+            class="control-button primary"
+            type="button"
+            aria-label="Pause timer"
+          >
+            Ⅱ <span class="button-label">Pause</span>
+          </button>
+          <button
+            id="undo"
+            class="control-button icon-button"
+            type="button"
+            title="Undo (Ctrl+Z)"
+            aria-label="Undo"
+            disabled
+          >
+            ↶
+          </button>
+          <button
+            id="redo"
+            class="control-button icon-button"
+            type="button"
+            title="Redo (Ctrl+Y)"
+            aria-label="Redo"
+            disabled
+          >
+            ↷
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="panel preview-panel" aria-labelledby="preview-title">
+          <div class="panel-heading">
+            <div class="heading-copy">
+              <p class="eyebrow">01 / PAGE PREVIEW</p>
+              <h1 id="preview-title">Live website</h1>
+            </div>
+            <span class="live-label"
+              ><span class="live-dot" aria-hidden="true"></span>Refreshes as you type</span
+            >
+          </div>
+          <div class="preview-frame-wrap">
+            <iframe
+              id="preview"
+              class="preview-frame"
+              title="Live preview of the website being typed"
+              sandbox="allow-same-origin"
+            ></iframe>
+            <div id="preview-empty" class="preview-empty">
+              <span class="preview-icon" aria-hidden="true">✦</span>
+              <strong>Your page will appear here</strong>
+              <span
+                >Start typing the faint prompt on the right. The preview updates as the page takes
+                shape.</span
+              >
+            </div>
+          </div>
+          <div class="panel-footnote">
+            <span id="standard-footnote">
+              <strong>Photo slots:</strong> the source references four images that were not
+              included, so their areas use the page’s color backgrounds.
+            </span>
+            <span id="layout-footnote" hidden>
+              <strong>HTML layout sprint:</strong> this preview is intentionally unstyled. Keep the
+              section IDs and classes in place for your partner’s CSS.
+            </span>
+          </div>
+        </section>
+
+        <section class="panel editor-panel" aria-labelledby="editor-title">
+          <div class="panel-heading editor-heading">
+            <div class="heading-copy">
+              <p id="editor-eyebrow" class="eyebrow">02 / TYPE THE FAINT PROMPT</p>
+              <h2 id="editor-title">Code practice</h2>
+            </div>
+            <div class="editor-metrics" aria-label="Typing statistics">
+              <span><span id="count-label">LINE</span> <b id="line-count">1 / 383</b></span>
+              <span>ACCURACY <b id="accuracy">100%</b></span>
+              <span class="metric-errors">ERRORS <b id="error-count">0</b></span>
+            </div>
+          </div>
+          <div
+            class="progress-track"
+            role="progressbar"
+            aria-label="Typing progress"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <div id="progress" class="progress-fill"></div>
+          </div>
+          <div class="editor-tools" role="group" aria-label="Code display controls">
+            <span class="tool-label">CODE VIEW</span>
+            <div class="view-controls">
+              <span class="zoom-label">ZOOM</span>
+              <button id="zoom-out" class="zoom-button" type="button" aria-label="Zoom code out" title="Zoom code out">−</button>
+              <output id="zoom-level" class="zoom-level" aria-live="polite">100%</output>
+              <button id="zoom-in" class="zoom-button" type="button" aria-label="Zoom code in" title="Zoom code in">+</button>
+              <button id="zoom-reset" class="zoom-button" type="button" aria-label="Reset code zoom" title="Reset code zoom">↺</button>
+              <span class="tool-divider" aria-hidden="true"></span>
+              <button
+                id="line-numbers-toggle"
+                class="line-numbers-toggle"
+                type="button"
+                aria-label="Hide line numbers"
+                aria-pressed="true"
+                title="Hide line numbers"
+              ><span aria-hidden="true">123</span><span class="line-numbers-label">Lines</span></button>
+              <button
+                id="correct-color-toggle"
+                class="correct-color-toggle"
+                type="button"
+                aria-label="Switch correct typed characters to black"
+                aria-pressed="false"
+                title="Correct typed text: Green. Click to switch to black."
+              ><span class="color-swatch" aria-hidden="true"></span><span class="line-numbers-label">Green</span></button>
+            </div>
+          </div>
+          <div id="editor-area" class="editor-area">
+            <div id="gutter" class="line-gutter" aria-hidden="true"></div>
+            <pre id="mirror" class="code-mirror" aria-hidden="true"></pre>
+            <textarea
+              id="editor"
+              class="code-input"
+              aria-label="Type the competition page code shown in faint gray"
+              aria-describedby="typing-help"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              wrap="off"
+              disabled
+            ></textarea>
+          </div>
+          <div id="lesson-area" class="lesson-area">
+            <div id="standard-tip" class="standard-tip">
+              <span class="tip-mark" aria-hidden="true">↕</span>
+              <div>
+                <strong>Formatted source · scroll inside the editor</strong>
+                <p>
+                  Click to focus, then type from the first character in order. The gray prompt is a
+                  guide, not editable text. Enter advances only at its line breaks; scroll to view
+                  the rest of the code.
+                </p>
+              </div>
+            </div>
+            <div id="layout-tip" class="standard-tip" hidden>
+              <span class="tip-mark" aria-hidden="true">⌘</span>
+              <div>
+                <strong>One hour · HTML structure only</strong>
+                <p>
+                  Type from the first character in order. Enter advances only at the prompt’s line
+                  breaks. CSS is removed so your partner can style the page regions, IDs, and classes.
+                </p>
+              </div>
+            </div>
+            <div
+              id="lesson-map"
+              class="lesson-map"
+              aria-label="Adaptive Learning components"
+              hidden
+            ></div>
+          </div>
+          <div class="editor-status">
+            <span id="status" class="status-message" role="status" aria-live="polite"
+              >Loading the competition page…</span
+            >
+            <span id="typing-help" class="shortcut"
+              >Tab inserts · Ctrl+Z undo · Ctrl+Y redo · Paste disabled</span
+            >
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
